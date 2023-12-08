@@ -40,7 +40,7 @@ while True:
         print(f"{i}. Jadwal: {jadwal}, Lokasi: {lokasi}")
 
     print("0. Keluar")
-    user_input = input("Pilih nomor jadwal (0 untuk keluar): ")
+    user_input = input("Pilih nomor Tujuan (0 untuk keluar): ")
 
     if user_input == "0":
         break
