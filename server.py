@@ -6,10 +6,13 @@ from xmlrpc.server import SimpleXMLRPCRequestHandler
 current_boarding_schedule = None
 current_transit_location = None
 
-rute_1 = ["Bandung","Yogyakarta", "Bali", "Lombok", "Labuan_Bajo"]
-list_jadwal1 = {"2023-12-02 12:30:00" : "Bandung", "2023-12-02 14:30:00" : "Yogyakarta", "2023-12-02 15:30:00" : "Bali", "2023-12-02 16:30:00" : "Lombok", "2023-12-02 18:30:00" : "Labuan_Bajo"}
-
-list_kota=["medan", "batam", "singapore","apaajalah"]
+list_jadwal1 = {
+    "2023-12-02 12:30:00": "Bandung",
+    "2023-12-02 14:30:00": "Yogyakarta",
+    "2023-12-02 15:30:00": "Bali",
+    "2023-12-02 16:30:00": "Lombok",
+    "2023-12-02 18:30:00": "Labuan_Bajo"
+}
 
 # Fungsi untuk memproses pesan dan menyimpannya ke file
 def process_message(message):
