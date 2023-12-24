@@ -1,4 +1,3 @@
-import json
 from xmlrpc.client import ServerProxy
 import time
 
@@ -6,8 +5,6 @@ import time
 server = ServerProxy("http://localhost:8000/")
 
 # Fungsi untuk mengirim pesan
-
-
 def send_notification(boarding_schedule, transit_location):
     message = {
         "boarding_schedule": boarding_schedule,
@@ -20,10 +17,14 @@ def send_notification(boarding_schedule, transit_location):
 
     with open("client_boarding.txt", "w") as f:
         f.write(response2)
-    
+
     print("Meminta data boarding . . .")
 
-    
+# Tambahkan fungsi untuk menampilkan menu
+def show_menu():
+    menu = server.print_menu()
+    print(menu)
+
 # Dictionary jadwal dan lokasi
 list_jadwal = {
     "2023-12-02 12:30:00": "Bandung",
@@ -36,9 +37,7 @@ list_jadwal = {
 # Menu untuk memilih jadwal dan lokasi
 while True:
     print("\nMenu Pilihan Jadwal dan Lokasi:")
-    for i, (jadwal, lokasi) in enumerate(list_jadwal.items(), 1):
-        print(f"{i}. Jadwal: {jadwal}, Lokasi: {lokasi}")
-
+    show_menu()
     print("0. Keluar")
     user_input = input("Pilih nomor Tujuan (0 untuk keluar): ")
 
