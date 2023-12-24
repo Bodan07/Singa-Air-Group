@@ -48,7 +48,7 @@ def get_list_jadwal():
     return json.dumps(list_jadwal1)
 
 # Buat server XML-RPC
-server = SimpleXMLRPCServer(("localhost", 8000))
+server = SimpleXMLRPCServer(("localhost", 8000), allow_none=True)
 
 # Tambahkan fungsi dan atribut ke server
 server.register_function(get_list_jadwal, "get_list_jadwal")
