@@ -1,59 +1,58 @@
 from xmlrpc.client import ServerProxy
 import time
+import json
 
 # Buat objek proxy untuk berkomunikasi dengan server
-server = ServerProxy("http://localhost:8000/")
+server = ServerProxy("http://localhost:8000/",allow_none=True)
 
-# Fungsi untuk mengirim pesan
-def send_notification(boarding_schedule, transit_location):
-    message = {
-        "boarding_schedule": boarding_schedule,
-        "transit_location": transit_location
-    }
-
-    response1, response2 = server.process_message(message)
-    with open("client_lokasi.txt", "w") as f:
-        f.write(response1)
-
-    with open("client_boarding.txt", "w") as f:
-        f.write(response2)
-
-    print("Meminta data boarding . . .")
-
-# Tambahkan fungsi untuk menampilkan menu
+# Fungsi untuk menampilkan menu
 def show_menu():
     menu = server.print_menu()
     print(menu)
 
-# Dictionary jadwal dan lokasi
-list_jadwal = {
-    "2023-12-02 12:30:00": "Bandung",
-    "2023-12-02 14:30:00": "Yogyakarta",
-    "2023-12-02 15:30:00": "Bali",
-    "2023-12-02 16:30:00": "Lombok",
-    "2023-12-02 18:30:00": "Labuan_Bajo"
-}
+# Fungsi untuk menyimpan data ke dalam file
+def save_to_file(data, filename):
+    with open(filename, "w") as f:
+        f.write(data)
+        print(f"Data disimpan di {filename}")
 
-# Menu untuk memilih jadwal dan lokasi
+# Meminta list jadwal dari server
+list_jadwal_str = server.get_list_jadwal()
+list_jadwal = json.loads(list_jadwal_str)
+
+# Menampilkan menu dari server
 while True:
     print("\nMenu Pilihan Jadwal dan Lokasi:")
     show_menu()
-    print("0. Keluar")
-    user_input = input("Pilih nomor Tujuan (0 untuk keluar): ")
+
+    # Meminta input dari pengguna
+    user_input = input("Masukkan nomor atau nama kota (0 untuk keluar): ")
 
     if user_input == "0":
+        print("Terima kasih. Sampai jumpa lagi!")
         break
-    elif user_input.isdigit():
+
+    if user_input.isdigit():
         index = int(user_input)
         if 1 <= index <= len(list_jadwal):
             selected_schedule = list(list_jadwal.keys())[index - 1]
-            selected_location = list(list_jadwal.values())[index - 1]
 
             # Simulasi pengiriman pesan
-            send_notification(selected_schedule, selected_location)
+            result_loc, result_sch = server.process_message({"boarding_schedule": selected_schedule, "transit_location": None})
+
+            # Menyimpan hasil ke file
+            save_to_file(result_sch, "client_boarding.txt")
+
             # Tunggu beberapa detik
-            time.sleep(15)
+            time.sleep(2)
         else:
             print("Nomor jadwal tidak valid. Silakan pilih nomor yang sesuai.")
     else:
-        print("Input tidak valid. Masukkan nomor yang sesuai.")
+        # Simulasi pengiriman pesan
+        result_loc, result_sch = server.process_message({"transit_location": user_input, "boarding_schedule": None})
+
+        # Menyimpan hasil ke file
+        save_to_file(result_loc, "client_location.txt")
+
+        # Tunggu beberapa detik
+        time.sleep(2)

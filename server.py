@@ -43,10 +43,15 @@ def print_menu():
         menu += f"{i + 1}. Jadwal: {key}, Lokasi: {value}\n"
     return menu
 
-# Buat server XML-RPC
-server = SimpleXMLRPCServer(("localhost", 8000), allow_none=True)
+# Fungsi baru untuk mendapatkan list jadwal
+def get_list_jadwal():
+    return json.dumps(list_jadwal1)
 
-# Tambahkan fungsi ke server
+# Buat server XML-RPC
+server = SimpleXMLRPCServer(("localhost", 8000))
+
+# Tambahkan fungsi dan atribut ke server
+server.register_function(get_list_jadwal, "get_list_jadwal")
 server.register_function(process_message, "process_message")
 server.register_function(print_menu, "print_menu")
 
